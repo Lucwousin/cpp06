@@ -22,8 +22,6 @@ class Converter {
 
 		double _val;
 
-		const ValType _type;
-
 		void printChar() const;
 		void printInt() const;
 		void printFloat() const;

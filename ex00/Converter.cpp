@@ -14,25 +14,24 @@
 #include <cmath>
 #include <climits>
 #include <iostream>
-#include <iomanip>
 
-Converter::Converter(const Converter &other): _type(other._type) {
+Converter::Converter(const Converter &other) {
 	_val = other._val;
 }
 
-Converter::Converter(char val): _type(CHAR) {
-	_val = val;
+Converter::Converter(char val) {
+	_val = static_cast<double>(val);
 }
 
-Converter::Converter(int val): _type(INT) {
-	_val = val;
+Converter::Converter(int val) {
+	_val = static_cast<double>(val);
 }
 
-Converter::Converter(float val): _type(FLOAT) {
-	_val = val;
+Converter::Converter(float val) {
+	_val = static_cast<double>(val);
 }
 
-Converter::Converter(double val): _type(DOUBLE) {
+Converter::Converter(double val) {
 	_val = val;
 }
 
@@ -52,7 +51,7 @@ void Converter::printChar() const {
 		std::cout << "impossible\n";
 		return;
 	}
-	char c = (char) _val;
+	char c = static_cast<char>(_val);
 	if (std::isprint(c)) {
 		std::cout << '\'' << c << "'\n";
 	} else {
@@ -66,7 +65,7 @@ void Converter::printInt() const {
 	if (std::isnan(_val) || std::isinf(_val) || _val < INT_MIN || _val > INT_MAX) {
 		std::cout << "impossible";
 	} else {
-		std::cout << (int) _val;
+		std::cout << static_cast<int>(_val);
 	}
 	std::cout << '\n';
 }
@@ -77,10 +76,10 @@ void Converter::printFloat() const {
 	if (std::isnan(_val) || std::isinf(_val))
 		std::cout << _val << 'f';
 	else
-		std::cout << (float) _val << 'f';
+		std::cout << static_cast<float>(_val) << 'f';
 	std::cout << '\n';
 }
 
 void Converter::printDouble() const {
-	std::cout << "double: " << std::fixed << _val << '\n';
+	std::cout << std::fixed << "double: " << _val << '\n';
 }
