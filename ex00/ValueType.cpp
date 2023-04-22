@@ -47,11 +47,12 @@ static bool isFloatVal(const std::string &input) {
 
 static ValType identifyFloat(const std::string &input) {
 	const size_t pos = input[0] == '-' || input[0] == '+';
-	if (input.compare(pos, 3, "inf") != 0 && input.compare(pos, 3, "nan") != 0)
+	// If pos isn't 0, this should never be a NaN (so YaN)
+	if (input.compare(pos, 3, "inf") != 0 && (pos != 0 || input.compare(0, 3, "nan") != 0))
 		throw ValueType::InvalidValueException("Could not identify input!");
 	if (pos + 3 == input.length())
 		return DOUBLE;
-	if (input[input.length() - 1] == 'f')
+	if (input[-1] == 'f')
 		return FLOAT;
 	throw ValueType::InvalidValueException("Invalid special value!");
 }
@@ -64,7 +65,7 @@ void ValueType::identify(const std::string &input) {
 	else if (isInt(input))
 		_type = INT;
 	else if (isFloatVal(input))
-		_type = input[input.length() - 1] == 'f' ? FLOAT : DOUBLE;
+		_type = input[-1] == 'f' ? FLOAT : DOUBLE;
 	else
 		_type = identifyFloat(input);
 }
@@ -100,7 +101,7 @@ int ValueType::toInt() const {
 		const std::string err = "Value " + _input + " overflows!";
 		throw InvalidValueException(err);
 	}
-	return (int) parsed;
+	return static_cast<int>(parsed);
 }
 
 float ValueType::toFloat() const {
